@@ -1,13 +1,10 @@
-// كود بسيط لـ Node.js يشتغل على Vercel
-module.exports = (req, res) => {
-  const { surah } = req.query; // استلام رقم السورة من الرابط
-  
-  // هنا مثال لرد تجريبي، لاحقاً سنضع بيانات القرآن الحقيقية
-  const data = {
-    status: "success",
-    message: `أنت تطلب بيانات السورة رقم ${surah || 'غير محددة'}`,
-    developer: "جيمي"
-  };
-
-  res.status(200).json(data);
+module.exports = async (req, res) => {
+res.setHeader('Access-Control-Allow-Origin', '*');
+const { surah = 1 } = req.query;
+const resp = await fetch('https://api.alquran.cloud/v1/surah/' + surah);
+const info = await resp.json();
+res.status(200).json({
+creator: "Waleed",
+quran_data: info.data
+});
 };

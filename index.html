@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>مصحف وليد</title>
+<style>
+body { font-family: sans-serif; background: #f4f7f6; text-align: center; padding: 20px; }
+.container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+h1 { color: #2c3e50; }
+select { padding: 10px; width: 200px; border-radius: 5px; font-size: 16px; margin-bottom: 20px; }
+.ayah { background: #f9f9f9; padding: 15px; margin: 10px 0; border-right: 5px solid #27ae60; font-size: 22px; line-height: 1.8; text-align: right; }
+.footer { margin-top: 30px; font-size: 14px; color: #7f8c8d; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>مصحف وليد الإلكتروني 📖</h1>
+<p>اختر السورة لقرائتها من السيرفر الخاص بك:</p>
+<select id="surahSelect" onchange="loadSurah()">
+<option value="1">الفاتحة</option>
+<option value="2">البقرة</option>
+<option value="18">الكهف</option>
+<option value="36">يس</option>
+<option value="67">الملك</option>
+<option value="114">الناس</option>
+</select>
+<div id="content">جارٍ التحميل...</div>
+<div class="footer">صنع بواسطة: Waleed</div>
+</div>
+<script>
+async function loadSurah() {
+const id = document.getElementById('surahSelect').value;
+const content = document.getElementById('content');
+try {
+const response = await fetch('/api?surah=' + id);
+const result = await response.json();
+let html = '<h3>' + result.quran_data.name + '</h3>';
+result.quran_data.ayahs.forEach(ayah => {
+html += '<div class="ayah">' + ayah.text + ' <span>(' + ayah.numberInSurah + ')</span></div>';
+});
+content.innerHTML = html;
+} catch (e) {
+content.innerHTML = "خطأ في تحميل البيانات";
+}
+}
+window.onload = loadSurah;
+</script>
+</body>
+</html>

@@ -1,18 +1,32 @@
+حقك عليّ يا وليد، أنا عارف إنك تعبت من كتر ما الكود بيستخبى، بس المرة دي هكتبهولك نص صريح ومباشر عشان مفيش أي حاجة تمنعك إنك تنسخه وتنهي المشروع ده بنجاح.
+
+بما إن ملفك الـ 4 ميجا اترفع خلاص، اتبع الخطوات دي بالظبط:
+
+1. كود ملف api/index.js بالكامل:
+(انسخ النص اللي بين الخطين ده وحطه مكان كل اللي في الملف عندك)
+
 const fs = require('fs');
 const path = require('path');
 
 module.exports = async (req, res) => {
 res.setHeader('Access-Control-Allow-Origin', '*');
 res.setHeader('Content-Type', 'application/json');
-
 const { surah = 1 } = req.query;
-
 try {
 const filePath = path.join(process.cwd(), 'quran_data.json');
 const jsonData = fs.readFileSync(filePath, 'utf-8');
 const allAyas = JSON.parse(jsonData);
-
+const surahAyas = allAyas.filter(a => a.sura_no == surah);
+if (surahAyas.length > 0) {
+res.status(200).json({
+creator: "Waleed The Source",
+name: surahAyas[0].sura_name_ar,
+ayahs: surahAyas
+});
+} else {
+res.status(404).json({ error: "السورة مش موجودة" });
+}
 } catch (e) {
-res.status(500).json({ error: "تأكد من رفع ملف quran_data.json كاملاً" });
+res.status(500).json({ error: "السيرفر مش قادر يقرأ الملف الكبير" });
 }
 };

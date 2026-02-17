@@ -20,6 +20,6 @@ ayahs: surahAyas
 res.status(404).json({ error: "السورة مش موجودة" });
 }
 } catch (e) {
-res.status(500).json({ error: "السيرفر مش قادر يقرأ ملف الـ 4 ميجا" });
+res.status(500).json({ error: "السيرفر مش قادر يقرأ الملف" });
 }
 };

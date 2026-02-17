@@ -4,14 +4,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مصحف وليد - النسخة النهائية</title>
+<title>مصحف وليد - النسخة المصححة</title>
 <style>
 @import url('');
 body { font-family: 'Amiri', serif; background: #eceff1; text-align: center; padding: 10px; }
 .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-h1 { color: #1b5e20; font-size: 2.5rem; }
+h1 { color: #1b5e20; }
 select { padding: 12px; width: 90%; max-width: 400px; border-radius: 10px; border: 2px solid #4caf50; font-size: 1.2rem; font-family: 'Amiri', serif; }
-.ayah { background: #f1f8e9; padding: 25px; margin: 20px 0; border-right: 10px solid #4caf50; font-size: 32px; line-height: 2.5; text-align: right; border-radius: 8px; direction: rtl; }
+.ayah { background: #f1f8e9; padding: 25px; margin: 20px 0; border-right: 10px solid #4caf50; font-size: 34px; line-height: 2.6; text-align: right; border-radius: 8px; direction: rtl; }
 .ayah-meta { font-size: 16px; color: #444; display: flex; justify-content: flex-end; gap: 15px; margin-top: 15px; border-top: 1px solid #c8e6c9; padding-top: 10px; font-family: sans-serif; }
 .tag { background: #e8f5e9; color: #2e7d32; padding: 3px 10px; border-radius: 5px; font-weight: bold; border: 1px solid #a5d6a7; }
 .surah-header { background: #1b5e20; color: white; padding: 20px; border-radius: 12px; font-size: 35px; margin: 20px 0; }
@@ -21,9 +21,9 @@ select { padding: 12px; width: 90%; max-width: 400px; border-radius: 10px; borde
 <div class="container">
 <h1>مصحف وليد الإلكتروني 📖</h1>
 <select id="surahSelect" onchange="loadSurah()">
-<option value="">-- اختر السورة (114) --</option>
+<option value="">-- اختر السورة --</option>
 </select>
-<div id="content">اختر سورة لعرض علامات الوقف والتقسيمات</div>
+<div id="content">سيظهر التشكيل وعلامات الأجزاء هنا</div>
 </div>
 <script>
 const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
@@ -38,18 +38,19 @@ async function loadSurah() {
 const id = select.value;
 if(!id) return;
 const contentDiv = document.getElementById('content');
-contentDiv.innerHTML = "جارٍ جلب البيانات...";
+contentDiv.innerHTML = "جارٍ جلب التشكيل والبيانات...";
 try {
 const response = await fetch('/api?surah=' + id);
 const result = await response.json();
 let html = '<div class="surah-header">' + result.name + '</div>';
 result.ayahs.forEach(ayah => {
 html += '<div class="ayah">';
-// استخدمت aya_text_emlaey عشان نضمن الحروف تظهر، و aya_no للرقم
-html += ayah.aya_text_emlaey;
-html += ' <span style="color:#1b5e20; font-weight:bold;">(' + ayah.aya_no + ')</span>';
+// رجعنا لـ aya_text عشان التشكيل يظهر
+html += (ayah.aya_text || ayah.aya_text_emlaey);
+html += ' <span style="color:#1b5e20;">(' + ayah.aya_no + ')</span>';
 html += '<div class="ayah-meta">';
 html += '<span class="tag">الجزء: ' + (ayah.jozz || '1') + '</span>';
+// ضبطنا عداد الأحزاب بناء على بيانات ملفك
 html += '<span class="tag">الحزب: ' + (ayah.hizb_no || ayah.hizb || '1') + '</span>';
 html += '<span class="tag">صفحة: ' + (ayah.page || '1') + '</span>';
 html += '</div></div>';

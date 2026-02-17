@@ -3,19 +3,23 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>مصحف وليد</title>
+<title>مصحف وليد - النسخة المطورة</title>
 <style>
 body { font-family: sans-serif; background: #eceff1; text-align: center; padding: 20px; }
-.container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-h1 { color: #1b5e20; }
-select { padding: 12px; width: 100%; max-width: 400px; border-radius: 10px; border: 2px solid #4caf50; font-size: 18px; cursor: pointer; }
-.ayah { background: #f1f8e9; padding: 25px; margin: 15px 0; border-right: 8px solid #4caf50; font-size: 26px; line-height: 2.2; text-align: right; border-radius: 8px; }
-.surah-header { background: #1b5e20; color: white; padding: 15px; border-radius: 10px; font-size: 30px; margin-bottom: 20px; }
+.container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+h1 { color: #1b5e20; margin-bottom: 5px; }
+.info-bar { background: #f9f9f9; padding: 10px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; color: #555; border: 1px solid #ddd; }
+select { padding: 12px; width: 100%; max-width: 400px; border-radius: 10px; border: 2px solid #4caf50; font-size: 18px; cursor: pointer; margin-bottom: 20px; }
+.ayah { background: #f1f8e9; padding: 25px; margin: 15px 0; border-right: 8px solid #4caf50; font-size: 28px; line-height: 2.3; text-align: right; border-radius: 8px; position: relative; }
+.ayah-meta { font-size: 12px; color: #666; display: block; margin-top: 10px; border-top: 1px dotted #ccc; padding-top: 5px; }
+.surah-header { background: #1b5e20; color: white; padding: 15px; border-radius: 10px; font-size: 32px; margin-bottom: 20px; }
+.tag { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 5px; margin-left: 5px; font-weight: bold; }
 </style>
 </head>
 <body>
 <div class="container">
 <h1>مصحف وليد الإلكتروني 📖</h1>
+<div class="info-bar">عرض الأجزاء، الأحزاب، وعلامات الوقف من السورس الأصلي</div>
 <select id="surahSelect" onchange="loadSurah()">
 <option value="">-- اختر السورة --</option>
 </select>
@@ -34,17 +38,26 @@ async function loadSurah() {
 const id = select.value;
 if(!id) return;
 const contentDiv = document.getElementById('content');
-contentDiv.innerHTML = "جارٍ التحميل...";
+contentDiv.innerHTML = "جارٍ تحميل بيانات الجزء والحزب...";
 try {
 const response = await fetch('/api?surah=' + id);
 const result = await response.json();
 let html = '<div class="surah-header">' + result.name + '</div>';
 result.ayahs.forEach(ayah => {
-html += '<div class="ayah">' + ayah.aya_text_emlaey + ' <span style="color:#1b5e20;">(' + ayah.aya_no + ')</span></div>';
+// إضافة علامات الأجزاء والأحزاب لو موجودة في ملفك
+html += '<div class="ayah">';
+html += ayah.aya_text; // استخدمت aya_text هنا عشان علامات الوقف تكون واضحة
+html += ' <span style="color:#1b5e20;">(' + ayah.aya_no + ')</span>';
+html += '<div class="ayah-meta">';
+html += '<span class="tag">الجزء: ' + ayah.jozz + '</span>';
+html += '<span class="tag">الحزب: ' + ayah.hizb + '</span>';
+html += '<span class="tag">صفحة: ' + ayah.page + '</span>';
+html += '</div></div>';
 });
 contentDiv.innerHTML = html;
+window.scrollTo(0,0);
 } catch (e) {
-contentDiv.innerHTML = "حدث خطأ في السيرفر";
+contentDiv.innerHTML = "حدث خطأ في عرض التقسيمات";
 }
 }
 </script>

@@ -1,7 +1,7 @@
 module.exports = async (req, res) => {
 res.setHeader('Access-Control-Allow-Origin', '*');
 const { surah = 1 } = req.query;
-const resp = await fetch('' + surah);
+const resp = await fetch('https://api.alquran.cloud/v1/surah/' + surah);
 const info = await resp.json();
 res.status(200).json({
 creator: "Waleed",

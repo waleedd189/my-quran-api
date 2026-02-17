@@ -44,7 +44,7 @@ const response = await fetch('/api?surah=' + id);
 const result = await response.json();
 let html = '<div class="surah-header">' + result.quran_data.name + '</div>';
 result.quran_data.ayahs.forEach(ayah => {
-html += '<div class="ayah">' + ayah.text + ' <span style="color:#1b5e20;">(' + ayah.numberInSurah + ')</span></div>';
+html += '<div class="ayah">' + ayah.text + ' <span style="color:#1b5e20;">(' + ayah.number + ')</span></div>';
 });
 contentDiv.innerHTML = html;
 } catch (e) {

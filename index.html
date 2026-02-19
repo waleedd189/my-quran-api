@@ -39,7 +39,7 @@ const response = await fetch('/api?surah=' + id);
 const result = await response.json();
 let html = '<div class="surah-header">' + result.name + '</div>';
 result.ayahs.forEach(ayah => {
-html += '<div class="ayah">' + ayah.aya_text_emlaey + ' <span style="color:#1b5e20;">(' + ayah.aya_no + ')</span></div>';
+html += '<div class="ayah">' + ayah.aya_text + ' <span style="color:#1b5e20;">(' + ayah.aya_no + ')</span></div>';
 });
 contentDiv.innerHTML = html;
 } catch (e) {

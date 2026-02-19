@@ -4,61 +4,12 @@
 <meta charset="UTF-8">
 <title>مصحف وليد</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
-
-body { 
-    font-family: 'Amiri', serif; 
-    background: #eceff1; 
-    text-align: center; 
-    padding: 20px; 
-}
-
-.container { 
-    max-width: 900px; 
-    margin: auto; 
-    background: white; 
-    padding: 30px; 
-    border-radius: 20px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-}
-
-h1 { 
-    color: #1b5e20; 
-    font-size: 32px;
-}
-
-select { 
-    padding: 12px; 
-    width: 100%; 
-    max-width: 400px; 
-    border-radius: 10px; 
-    border: 2px solid #4caf50; 
-    font-size: 18px; 
-    cursor: pointer; 
-    font-family: 'Amiri', serif;
-}
-
-.ayah { 
-    background: #f1f8e9; 
-    padding: 25px; 
-    margin: 15px 0; 
-    border-right: 8px solid #4caf50; 
-    font-size: 28px; 
-    line-height: 2.2; 
-    text-align: right; 
-    border-radius: 8px; 
-    font-family: 'Amiri', serif;
-}
-
-.surah-header { 
-    background: #1b5e20; 
-    color: white; 
-    padding: 15px; 
-    border-radius: 10px; 
-    font-size: 30px; 
-    margin-bottom: 20px; 
-    font-family: 'Amiri', serif;
-}
+body { font-family: sans-serif; background: #eceff1; text-align: center; padding: 20px; }
+.container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+h1 { color: #1b5e20; }
+select { padding: 12px; width: 100%; max-width: 400px; border-radius: 10px; border: 2px solid #4caf50; font-size: 18px; cursor: pointer; }
+.ayah { background: #f1f8e9; padding: 25px; margin: 15px 0; border-right: 8px solid #4caf50; font-size: 26px; line-height: 2.2; text-align: right; border-radius: 8px; }
+.surah-header { background: #1b5e20; color: white; padding: 15px; border-radius: 10px; font-size: 30px; margin-bottom: 20px; }
 </style>
 </head>
 <body>
@@ -70,38 +21,30 @@ select {
 <div id="content">اختر سورة للبدء</div>
 </div>
 <script>
-const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحجيل","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
-
+const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارك","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
 const select = document.getElementById('surahSelect');
 surahNames.forEach((name, index) => {
-    let option = document.createElement('option');
-    option.value = index + 1;
-    option.textContent = (index + 1) + ". " + name;
-    select.appendChild(option);
+let option = document.createElement('option');
+option.value = index + 1;
+option.textContent = (index + 1) + ". " + name;
+select.appendChild(option);
 });
-
 async function loadSurah() {
-    const id = select.value;
-    if(!id) return;
-    const contentDiv = document.getElementById('content');
-    contentDiv.innerHTML = "جارٍ التحميل...";
-    try {
-        const response = await fetch('/api?surah=' + id);
-        const result = await response.json();
-        
-        if(result.success === false) {
-            contentDiv.innerHTML = "حدث خطأ: " + result.error;
-            return;
-        }
-        
-        let html = '<div class="surah-header">سورة ' + result.name + '</div>';
-        result.ayahs.forEach(ayah => {
-            html += '<div class="ayah">' + ayah.aya_text + ' <span style="color:#1b5e20;">(' + ayah.aya_no + ')</span></div>';
-        });
-        contentDiv.innerHTML = html;
-    } catch (e) {
-        contentDiv.innerHTML = "حدث خطأ في السيرفر";
-    }
+const id = select.value;
+if(!id) return;
+const contentDiv = document.getElementById('content');
+contentDiv.innerHTML = "جارٍ التحميل...";
+try {
+const response = await fetch('/api?surah=' + id);
+const result = await response.json();
+let html = '<div class="surah-header">' + result.name + '</div>';
+result.ayahs.forEach(ayah => {
+html += '<div class="ayah">' + ayah.aya_text_emlaey + ' <span style="color:#1b5e20;">(' + ayah.aya_no + ')</span></div>';
+});
+contentDiv.innerHTML = html;
+} catch (e) {
+contentDiv.innerHTML = "حدث خطأ في السيرفر";
+}
 }
 </script>
 </body>

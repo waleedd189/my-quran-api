@@ -1,0 +1,13 @@
+{
+  "name": "my-quran-api",
+  "version": "1.0.0",
+  "description": "API للقرآن الكريم - مصحف وليد الإلكتروني",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["quran", "api", "islam", "قرآن"],
+  "author": "Waleed",
+  "license": "MIT"
+}

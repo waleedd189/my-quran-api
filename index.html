@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>قرآن كريم</title>
+<title>مصحف وليد</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; }
@@ -108,9 +108,6 @@ select {
 .btn-stop { border-color: #f44336; color: #f44336; }
 .btn-stop:hover { background: #f44336; color: white; }
 
-.btn-pause { border-color: #ff9800; color: #ff9800; }
-.btn-pause:hover { background: #ff9800; color: white; }
-
 .surah-header { 
     background: #1b5e20; 
     color: white; 
@@ -132,6 +129,7 @@ select {
     flex-direction: column;
     gap: 10px;
     box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
 }
 
 .player-bar.show {
@@ -156,49 +154,52 @@ select {
     border-right-color: #2e7d32 !important;
 }
 
-.loading {
-    opacity: 0.6;
+.toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: none;
+    z-index: 2000;
+}
+
+.toast.show {
+    display: block;
 }
 </style>
 </head>
 <body>
 <div class="container">
-<h1>قرآن كريم 📖</h1>
+<h1>مصحف وليد الإلكتروني 📖</h1>
 <div class="controls">
     <select id="surahSelect" onchange="loadSurah()">
         <option value="">-- اختر السورة --</option>
     </select>
     <select id="reciterSelect" onchange="saveReciter()">
-        <optgroup label="🇪🇬 قراء مصر">
-            <option value="ar.alafasy" selected>مشاري العفاسي</option>
-            <option value="ar.abdulbasitmurattal">عبد الباسط عبد الصمد</option>
-            <option value="ar.minshawi">محمد صديق المنشاوي</option>
-            <option value="ar.husary">محمود خليل الحصري</option>
-            <option value="ar.husarymujawwad">الحصري مجود</option>
-            <option value="ar.muhammadayyoub">محمد أيوب</option>
-        </optgroup>
-        <optgroup label="🕋 قراء الحرم المكي">
-            <option value="ar.abdurrahmaansudais">عبد الرحمن السديس</option>
-            <option value="ar.saudalshuraim">سعود الشريم</option>
-            <option value="ar.mahermuaiqly">ماهر المعيقلي</option>
-            <option value="ar.yasseradress">ياسر الدوسري</option>
-        </optgroup>
-        <optgroup label="🌍 قراء عالميون">
-            <option value="ar.abdullahbasfar">عبد الله بصفر</option>
-            <option value="ar.abdurrashidsofi">عبد الرشيد صوفي</option>
-        </optgroup>
+        <option value="ar.alafasy" selected>مشاري العفاسي</option>
+        <option value="ar.abdulbasitmurattal">عبد الباسط</option>
+        <option value="ar.minshawi">المنشاوي</option>
+        <option value="ar.husary">الحصري</option>
+        <option value="ar.abdurrahmaansudais">السديس</option>
+        <option value="ar.mahermuaiqly">ماهر المعيقلي</option>
     </select>
 </div>
 <div id="content">اختر سورة للبدء</div>
 </div>
 
 <div class="player-bar" id="playerBar">
-<div class="player-info">
-    <span>🎧</span>
-    <span id="playerInfo">جاري التشغيل...</span>
+    <div class="player-info">
+        <span>🎧</span>
+        <span id="playerInfo">جاري التشغيل...</span>
+    </div>
+    <audio id="audioPlayer" controls></audio>
 </div>
-<audio id="audioPlayer" controls></audio>
-</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحجيل","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
@@ -207,12 +208,9 @@ let currentReciter = localStorage.getItem('reciter') || 'ar.alafasy';
 let currentAyahs = [];
 let currentSurahId = 1;
 let currentAyahId = null;
-let isPlaying = false;
 
-// تحميل المقرئ المحفوظ
 document.getElementById('reciterSelect').value = currentReciter;
 
-// ملء قائمة السور
 const select = document.getElementById('surahSelect');
 surahNames.forEach((name, index) => {
     let option = document.createElement('option');
@@ -221,13 +219,12 @@ surahNames.forEach((name, index) => {
     select.appendChild(option);
 });
 
-// حفظ المقرئ
 function saveReciter() {
     currentReciter = document.getElementById('reciterSelect').value;
     localStorage.setItem('reciter', currentReciter);
+    showToast('تم تغيير القارئ');
 }
 
-// تحميل السورة
 async function loadSurah() {
     const id = select.value;
     if(!id) return;
@@ -252,19 +249,16 @@ async function loadSurah() {
     }
 }
 
-// عرض السورة
 function renderSurah(result) {
     let html = '<div class="surah-header">سورة ' + result.name + '</div>';
     
     result.ayahs.forEach(ayah => {
-        const audioUrl = getAudioUrl(ayah.id);
         html += `
-        <div class="ayah" id="ayah-${ayah.aya_no}" data-id="${ayah.id}">
+        <div class="ayah" id="ayah-${ayah.aya_no}" data-id="${ayah.id}" data-global="${ayah.id}">
             <span class="ayah-number">${ayah.aya_no}</span>
             ${ayah.aya_text_emlaey}
             <div class="ayah-actions">
                 <button class="btn" onclick="playAyah(${ayah.id}, ${ayah.aya_no})" title="تشغيل">▶</button>
-                <button class="btn btn-pause" onclick="pauseAudio()" title="إيقاف مؤقت">⏸</button>
                 <button class="btn btn-stop" onclick="stopAudio()" title="إيقاف">⏹</button>
             </div>
         </div>`;
@@ -273,83 +267,89 @@ function renderSurah(result) {
     document.getElementById('content').innerHTML = html;
 }
 
-// رابط الصوت
-function getAudioUrl(ayahId) {
-    return `https://cdn.islamic.network/quran/audio/128/${currentReciter}/${ayahId}.mp3`;
-}
-
-// تشغيل آية
-function playAyah(ayahId, ayahNo) {
+function playAyah(globalId, ayahNo) {
     const audio = document.getElementById('audioPlayer');
-    const audioUrl = getAudioUrl(ayahId);
+    
+    // رابط الصوت - نستخدم ID العالمي
+    const audioUrl = `https://cdn.islamic.network/quran/audio/128/${currentReciter}/${globalId}.mp3`;
+    
+    console.log('Playing:', audioUrl);
     
     // تحديث الواجهة
     document.querySelectorAll('.ayah').forEach(el => el.classList.remove('playing'));
     document.getElementById('ayah-' + ayahNo)?.classList.add('playing');
     
-    currentAyahId = ayahId;
+    currentAyahId = globalId;
     
     audio.src = audioUrl;
-    audio.play().then(() => {
-        isPlaying = true;
-        showPlayer(surahNames[currentSurahId - 1], ayahNo);
-    }).catch(err => {
-        console.error('Error playing:', err);
-        alert('تعذر تشغيل الصوت');
-    });
+    
+    audio.play()
+        .then(() => {
+            showPlayer(surahNames[currentSurahId - 1], ayahNo);
+        })
+        .catch(err => {
+            console.error('Play error:', err);
+            // نحاول بسيرفر تاني
+            tryAlternativeAudio(globalId, ayahNo);
+        });
 }
 
-// تشغيل الآية التالية
-function playNext() {
-    if (!currentAyahs || currentAyahs.length === 0) return;
-    
-    const currentAyah = currentAyahs.find(a => a.id === currentAyahId);
-    if (!currentAyah) return;
-    
-    const nextAyahNo = currentAyah.aya_no + 1;
-    const nextAyah = currentAyahs.find(a => a.aya_no === nextAyahNo);
-    
-    if (nextAyah) {
-        playAyah(nextAyah.id, nextAyah.aya_no);
-    } else {
-        // انتهت السورة
-        stopAudio();
-    }
-}
-
-// إيقاف مؤقت
-function pauseAudio() {
+function tryAlternativeAudio(globalId, ayahNo) {
     const audio = document.getElementById('audioPlayer');
-    if (audio.paused) {
-        audio.play();
-    } else {
-        audio.pause();
-    }
+    // سيرفر بديل
+    const altUrl = `https://verses.quran.com/Alafasy/mp3/${globalId}.mp3`;
+    
+    audio.src = altUrl;
+    audio.play()
+        .then(() => {
+            showPlayer(surahNames[currentSurahId - 1], ayahNo);
+        })
+        .catch(err => {
+            console.error('Alt play error:', err);
+            showToast('⚠️ تعذر تشغيل الصوت - تأكد من الاتصال بالإنترنت');
+            document.querySelectorAll('.ayah').forEach(el => el.classList.remove('playing'));
+        });
 }
 
-// إيقاف
 function stopAudio() {
     const audio = document.getElementById('audioPlayer');
     audio.pause();
     audio.currentTime = 0;
-    isPlaying = false;
     document.querySelectorAll('.ayah').forEach(el => el.classList.remove('playing'));
     hidePlayer();
 }
 
-// إظهار المشغل
 function showPlayer(surahName, ayahNo) {
     document.getElementById('playerInfo').textContent = surahName + ' - آية ' + ayahNo;
     document.getElementById('playerBar').classList.add('show');
 }
 
-// إخفاء المشغل
 function hidePlayer() {
     document.getElementById('playerBar').classList.remove('show');
 }
 
-// عند انتهاء الصوت
-document.getElementById('audioPlayer').addEventListener('ended', playNext);
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// عند انتهاء الصوت - تشغيل التالي
+document.getElementById('audioPlayer').addEventListener('ended', () => {
+    // البحث عن الآية التالية
+    const currentAyah = currentAyahs.find(a => a.id === currentAyahId);
+    if (currentAyah) {
+        const nextAyahNo = currentAyah.aya_no + 1;
+        const nextAyah = currentAyahs.find(a => a.aya_no === nextAyahNo);
+        if (nextAyah) {
+            playAyah(nextAyah.id, nextAyah.aya_no);
+        } else {
+            stopAudio();
+            showToast('✅ انتهت السورة');
+        }
+    }
+});
 </script>
 </body>
 </html>

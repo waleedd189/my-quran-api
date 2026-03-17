@@ -6,67 +6,151 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مصحف وليد الإلكتروني</title>
 <style>
-/* استخدمنا خط Amiri عشان يقرأ علامات الوقف والتشكيل صح /
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
-body { font-family: 'Amiri', serif; background: #f4f7f6; text-align: center; padding: 10px; }
-.container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-h1 { color: #2e7d32; font-size: 2.5rem; }
-.controls { background: #e8f5e9; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #c8e6c9; }
-select { padding: 12px; width: 100%; max-width: 400px; border-radius: 10px; border: 2px solid #4caf50; font-size: 1.2rem; font-family: 'Amiri', serif; }
-.audio-player { width: 100%; margin-top: 15px; }
-/ تنسيق الآية عشان المربعات تختفي */
-.ayah { background: #fff; padding: 25px; margin: 15px 0; border-right: 8px solid #4caf50; font-size: 32px; line-height: 2.4; text-align: right; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); white-space: normal; word-wrap: break-word; }
-.ayah-meta { font-size: 14px; color: #666; display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; font-family: sans-serif; }
-.tag { background: #f1f8e9; color: #2e7d32; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
-.surah-header { background: #2e7d32; color: white; padding: 15px; border-radius: 10px; font-size: 35px; margin: 20px 0; }
+
+body {
+font-family: 'Amiri', serif;
+background-color: #f0f4f2;
+margin: 0;
+padding: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.container {
+width: 100%;
+max-width: 850px;
+background: white;
+padding: 30px;
+border-radius: 15px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+h1 { color: #2d5a27; font-size: 2.5rem; margin-bottom: 20px; }
+
+.controls-card {
+background: #e8f5e9;
+padding: 20px;
+border-radius: 12px;
+margin-bottom: 30px;
+border: 1px solid #c8e6c9;
+}
+
+select {
+width: 100%;
+max-width: 350px;
+padding: 12px;
+border-radius: 8px;
+border: 2px solid #2d5a27;
+font-family: 'Amiri', serif;
+font-size: 1.1rem;
+margin-bottom: 15px;
+}
+
+audio { width: 100%; height: 45px; }
+
+.surah-title {
+background: #2d5a27;
+color: white;
+padding: 15px;
+border-radius: 10px;
+font-size: 2.2rem;
+margin: 25px 0;
+}
+
+.ayah-box {
+background: #fff;
+border-bottom: 1px solid #eee;
+padding: 25px;
+margin-bottom: 10px;
+text-align: right;
+}
+
+.ayah-text {
+font-size: 1.9rem;
+line-height: 2.2;
+color: #333;
+margin-bottom: 15px;
+}
+
+.ayah-meta {
+display: flex;
+justify-content: flex-start;
+gap: 15px;
+font-family: sans-serif;
+font-size: 0.9rem;
+}
+
+.badge {
+background: #f1f8e9;
+color: #2d5a27;
+padding: 4px 10px;
+border-radius: 5px;
+font-weight: bold;
+}
 </style>
+
 </head>
 <body>
+
 <div class="container">
 <h1>مصحف وليد الإلكتروني 📖</h1>
-<div class="controls">
-<p>اختر السورة للاستماع والقراءة:</p>
-<select id="surahSelect" onchange="loadSurah()">
-<option value="">-- اختر السورة (114) --</option>
-</select>
-<div id="audioContainer"></div>
+
+<div class="controls-card">
+    <label style="display:block; margin-bottom:10px;">اختر السورة للاستماع والقراءة:</label>
+    <select id="surahSelector" onchange="updateView()">
+        <option value="">-- اختر السورة (114) --</option>
+    </select>
+    <div id="playerSpace"></div>
 </div>
-<div id="content">سيتم عرض الآيات والتشكيل هنا</div>
+
+<div id="mainDisplay">سيتم عرض الآيات والتشكيل هنا</div>
 </div>
 
 <script>
-const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+const surahs = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
 
-const select = document.getElementById('surahSelect');
-surahNames.forEach((name, index) => {
-let option = document.createElement('option');
-option.value = index + 1;
-option.textContent = (index + 1) + ". " + name;
-select.appendChild(option);
+const menu = document.getElementById('surahSelector');
+surahs.forEach((s, i) => {
+let opt = document.createElement('option');
+opt.value = i + 1;
+opt.textContent = (i + 1) + ". " + s;
+menu.appendChild(opt);
 });
 
-async function loadSurah() {
-const id = select.value;
-if(!id) return;
+async function updateView() {
+const sId = menu.value;
+if(!sId) return;
 
-const audioContainer = document.getElementById('audioContainer');
-const surahId = id.padStart(3, '0');
-audioContainer.innerHTML = &lt;audio controls class=&quot;audio-player&quot; src=&quot;https://server8.mp3quran.net/afs/${surahId}.mp3&quot;&gt;&lt;/audio&gt;;
+// تشغيل الصوت
+const audioUrl = `https://server8.mp3quran.net/afs/${sId.padStart(3, &#39;0&#39;)}.mp3`;
+document.getElementById(&#39;playerSpace&#39;).innerHTML = `&lt;audio controls src=&quot;${audioUrl}&quot;&gt;&lt;/audio&gt;`;
 
-const contentDiv = document.getElementById('content');
-contentDiv.innerHTML = "جارٍ التحميل من سيرفر وليد...";
+const display = document.getElementById(&#39;mainDisplay&#39;);
+display.innerHTML = &quot;جارٍ جلب البيانات...&quot;;
 
 try {
-const response = await fetch('/api?surah=' + id);
-const result = await response.json();
-let html = '<div class="surah-header">' + result.name + '</div>';
-result.ayahs.forEach(ayah => {
-html += &lt;div class=&quot;ayah&quot;&gt; ${ayah.aya_text || ayah.aya_text_emlaey}  &lt;span style=&quot;color:#2e7d32;&quot;&gt;(${ayah.aya_no})&lt;/span&gt; &lt;div class=&quot;ayah-meta&quot;&gt; &lt;span class=&quot;tag&quot;&gt;الجزء: ${ayah.jozz || &#39;1&#39;}&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;الحزب: ${ayah.hizb_no || ayah.hizb || &#39;1&#39;}&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;صفحة: ${ayah.page || &#39;1&#39;}&lt;/span&gt; &lt;/div&gt; &lt;/div&gt;;
-});
-contentDiv.innerHTML = html;
-window.scrollTo(0,0);
+    const res = await fetch(&#39;/api?surah=&#39; + sId);
+    const data = await res.json();
+    
+    let content = `&lt;div class=&quot;surah-title&quot;&gt;${data.name}&lt;/div&gt;`;
+    
+    data.ayahs.forEach(a =&gt; {
+        content += `
+            &lt;div class=&quot;ayah-box&quot;&gt;
+                &lt;div class=&quot;ayah-text&quot;&gt;${a.aya_text || a.aya_text_emlaey} &lt;span style=&quot;color:#2d5a27;&quot;&gt;(${a.aya_no})&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;ayah-meta&quot;&gt;
+                    &lt;span class=&quot;badge&quot;&gt;الجزء: ${a.jozz}&lt;/span&gt;
+                    &lt;span class=&quot;badge&quot;&gt;الحزب: ${a.hizb_no || a.hizb}&lt;/span&gt;
+                    &lt;span class=&quot;badge&quot;&gt;الصفحة: ${a.page}&lt;/span&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;`;
+    });
+    display.innerHTML = content;
+    window.scrollTo(0,0);
 } catch (e) {
-contentDiv.innerHTML = "حدث خطأ في عرض البيانات";
+    display.innerHTML = &quot;حدث خطأ.. تأكد من ملف quran_data.json&quot;;
 }
 }
 </script>
